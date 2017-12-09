@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration strict="true"
+	xmlns="http://logging.apache.org/log4j/2.0/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://logging.apache.org/log4j/2.0/config 
+    https://raw.githubusercontent.com/apache/logging-log4j2/log4j-2.8.2/log4j-core/src/main/resources/Log4j-config.xsd">
+
+	<Properties>
+		<Property name="log.dir">$${env:HTTPPROXY_HOME}/logs</Property>
+		<Property name="err.file">err_out.log</Property>
+		<Property name="info.file">info_out.log</Property>
+	</Properties>
+	
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout>
+				<pattern>
+					 %d [%t] %-5p %l - %msn%n
+				</pattern>
+			</PatternLayout>
+		</Console>
+		
+		<RollingFile name="ErrRollingFile" fileName="${log.dir}/${err.file}" filePattern="${log.dir}/$${date:yyyy-MM-dd}/%2i.${err.file}.gz" >
+			<SizeBasedTriggeringPolicy size="10 MB"/>
+			<PatternLayout>
+				<pattern>
+					%d [%t] %-5p %l - %msn%n
+				</pattern>
+			</PatternLayout>
+		</RollingFile>
+		
+	</Appenders>
+	
+	<Loggers>
+		<Root level="info">
+			<AppenderRef ref="ErrRollingFile" />
+			<AppenderRef ref="STDOUT" />
+		</Root>
+		
+		<Logger name="logger">
+			<AppenderRef ref="ErrRollingFile" />
+			<AppenderRef ref="STDOUT" />
+		</Logger>
+		
+	</Loggers>
+
+</Configuration>
